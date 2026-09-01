@@ -5,8 +5,8 @@ from pathlib import Path
 
 TOKI_PONA_ALPHABET = "aeijklmnopstuw"
 
-MANIFEST_PATH = Path("word_manifest.json")
-OUTPUT_C_PATH = Path("src/dictionary_data.c")
+MANIFEST_PATH = Path("build/word_manifest.json")
+OUTPUT_PATH = Path("build/dictionary_data.c")
 
 def escape_c_byte(b):
     if b == 0:
@@ -67,10 +67,10 @@ const dictionary_db_t g_dictionary = {{
 }};
 """
 
-    OUTPUT_C_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUTPUT_C_PATH, "w", encoding="utf-8") as f:
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(c_content)
     
-    print(f"C database successfully generated at {OUTPUT_C_PATH}")
+    print(f"C database successfully generated at {OUTPUT_PATH}")
 
 if __name__ == "__main__": generate_dictionary()

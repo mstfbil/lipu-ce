@@ -3,13 +3,16 @@ import json
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-MANIFEST_PATH = Path("word_manifest.json")
+MANIFEST_PATH = Path("build/word_manifest.json")
 
 FONT_PATH = "tools/Fairfax.ttf"
-OUTPUT_PATH = "src/gfx/sitelen_pona_glyphs.png"
+OUTPUT_PATH = "build/bitmap_glyphs"
 
 GLYPH_WIDTH = 12
 GLYPH_HEIGHT = 12
+BYTES_PER_IMAGE = GLYPH_WIDTH*GLYPH_HEIGHT//8
+
+assert GLYPH_HEIGHT*GLYPH_WIDTH == BYTES_PER_IMAGE*8, "Only bitmap sizes divisible by 8 are acceptable, try 12*12"
 
 with open(MANIFEST_PATH) as f:
     words = json.load(f)
@@ -18,16 +21,27 @@ ucsur_chars = [chr(item["ucsur"]) for item in words]
 
 def generate_glyphs():
     font = ImageFont.truetype(FONT_PATH, GLYPH_HEIGHT)
-    atlas_width = GLYPH_WIDTH * len(ucsur_chars)
-    
-    atlas = Image.new('RGBA', (atlas_width, GLYPH_HEIGHT), color=(0, 0, 0, 0))
-    draw = ImageDraw.Draw(atlas)
-    
+
+    # 1bpp bitmap format
+    canvas = Image.new('1', (GLYPH_WIDTH, GLYPH_HEIGHT), color=(0))
+    draw = ImageDraw.Draw(canvas)
+    t = f"const unsigned char bitmap_glyphs[{len(ucsur_chars)}][{BYTES_PER_IMAGE}] = ""{\n"
     for i, code in enumerate(ucsur_chars):
-        ox = i * GLYPH_WIDTH
-        draw.text((ox, 0), code, font=font, fill=(0, 0, 0, 255))
+        draw.text((0, 0), code, font=font, fill=(1))
+        data = canvas.get_flattened_data()
+        draw.rectangle([0,0,GLYPH_WIDTH,GLYPH_HEIGHT],0)
+        bitmap = [0]*BYTES_PER_IMAGE
+        for byte in range(BYTES_PER_IMAGE):
+            for bit in range(8):
+                bitmap[byte]<<=1
+                bitmap[byte]|=data[byte*8 + bit]
+
+        t += "  {" + ",".join(map(hex,bitmap)) + "},\n"
     
-    atlas.save(OUTPUT_PATH)
-    print(f"Succesfully generated sitelen pona atlas from font {FONT_PATH}")
+    Path(OUTPUT_PATH).parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_PATH+".c","w") as f:
+        f.write(t+"};")
+    
+    print(f"Succesfully generated bitmap glyphs from font {FONT_PATH}")
     
 if __name__ == "__main__": generate_glyphs()
