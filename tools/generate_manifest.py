@@ -4,7 +4,7 @@ import json
 import tomllib
 from pathlib import Path
 
-OUTPUT_PATH = Path("word_manifest.json")
+OUTPUT_PATH = Path("build/word_manifest.json")
 
 SONA_DIR = Path("sona")
 WORDS_META_DIR = SONA_DIR / "words" / "metadata"
@@ -38,6 +38,7 @@ def generate_manifest():
             "definition": definitions.get(word_key, "")
         })
     
+    Path(OUTPUT_PATH).parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=4, ensure_ascii=False)
     

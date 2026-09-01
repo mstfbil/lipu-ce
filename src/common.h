@@ -9,7 +9,7 @@
 #include "states.h"
 #include "dictionary_data.h"
 
-#include "bitmap/gen_bitmap_glyphs.h"
+#include "bitmap_glyphs.h"
 
 extern void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y);
 

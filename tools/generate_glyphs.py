@@ -3,10 +3,10 @@ import json
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-MANIFEST_PATH = Path("word_manifest.json")
+MANIFEST_PATH = Path("build/word_manifest.json")
 
 FONT_PATH = "tools/Fairfax.ttf"
-OUTPUT_PATH = "src/bitmap/gen_bitmap_glyphs"
+OUTPUT_PATH = "build/bitmap_glyphs"
 
 GLYPH_WIDTH = 12
 GLYPH_HEIGHT = 12
@@ -26,12 +26,6 @@ def generate_glyphs():
     canvas = Image.new('1', (GLYPH_WIDTH, GLYPH_HEIGHT), color=(0))
     draw = ImageDraw.Draw(canvas)
     t = f"const unsigned char bitmap_glyphs[{len(ucsur_chars)}][{BYTES_PER_IMAGE}] = ""{\n"
-    t2 = f"""#ifndef bitmap_include_file
-#define bitmap_include_file
-#ifdef __cplusplus
-extern "C" """"{"f"""
-#endif
-extern const unsigned char bitmap_glyphs[{len(ucsur_chars)}][{BYTES_PER_IMAGE}];"""
     for i, code in enumerate(ucsur_chars):
         draw.text((0, 0), code, font=font, fill=(1))
         data = canvas.get_flattened_data()
@@ -43,15 +37,10 @@ extern const unsigned char bitmap_glyphs[{len(ucsur_chars)}][{BYTES_PER_IMAGE}];
                 bitmap[byte]|=data[byte*8 + bit]
 
         t += "  {" + ",".join(map(hex,bitmap)) + "},\n"
+    
+    Path(OUTPUT_PATH).parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_PATH+".c","w") as f:
         f.write(t+"};")
-    with open(OUTPUT_PATH+".h","w") as f:
-        f.write(t2+f"""
-#define bitmap_glyphs_len {len(ucsur_chars)}
-#ifdef __cplusplus
-""""}""""
-#endif
-#endif""")
     
     print(f"Succesfully generated bitmap glyphs from font {FONT_PATH}")
     
