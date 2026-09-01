@@ -6,30 +6,34 @@
 
 void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y){
     /* how this works:
-    we start with a mask of 1
-    we shift it left by one position and use it to get a bit out of a byte
+    we start with a mask of 10000000
+    we shift it right by one position and use it to get a bit out of a byte
     when the mask is 0; this means that we are done with this byte and move on to the next
     */
-    uint8_t mask = 1;
+    uint8_t mask = 0b10000000;
     uint8_t sprite_index = 0;
     gfx_SetColor(GLYPH_COLOR);
     for(uint8_t row=0;row<GLYPH_SIZE;row++){
         uint8_t run_len = 0;
         for(uint8_t col=0;col<GLYPH_SIZE;col++){
-            if(mask==0){mask=1;sprite_index++;}
+            if(mask==0){mask=0b10000000;sprite_index++;}
             if(sprite[sprite_index]&mask)run_len++;
-            else gfx_FillRectangle_NoClip(
+            else {
+                gfx_FillRectangle_NoClip(
                     x + (col-run_len)*scale_x,
                     y + row*scale_y,
                     run_len*scale_x,
                     scale_y);
-            mask<<=1;
+                run_len=0;
+                }
+            mask>>=1;
         }
-        gfx_FillRectangle_NoClip(
-            x + (GLYPH_SIZE-run_len)*scale_x,
-            y + row*scale_y,
-            run_len*scale_x,
-            scale_y);
+        if(run_len)
+            gfx_FillRectangle_NoClip(
+                x + (GLYPH_SIZE-run_len)*scale_x,
+                y + row*scale_y,
+                run_len*scale_x,
+                scale_y);
     }
 }
 

@@ -3,7 +3,7 @@
 
 char *credits_text = "lipu CE " VERSION_NO " - a toki pona dictionary for the TI-84 Plus CE\n\n"
                      "- 2026 (c) Mustafa Bildirici - voltie.is-a.dev\n"
-                     "- Miron - Mirka1405 on GitHub\n\n"
+                     "- jan Milon - Mirka1405 on GitHub\n\n"
                      "Press any key to exit.";
 
 static void
