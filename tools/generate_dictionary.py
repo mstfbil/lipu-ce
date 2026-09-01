@@ -8,6 +8,18 @@ TOKI_PONA_ALPHABET = "aeijklmnopstuw"
 MANIFEST_PATH = Path("word_manifest.json")
 OUTPUT_C_PATH = Path("src/dictionary_data.c")
 
+def escape_c_byte(b):
+    if b == 0:
+        return r"\000"
+    elif b == ord('"'):
+        return r'\"'
+    elif b == ord('\n'):
+        return r'\n'
+    elif 32 <= b <= 126:
+        return chr(b)
+    else:
+        return f"\\{b:03o}"
+
 def generate_dictionary():
     if not MANIFEST_PATH.exists():
         print(f"Error: Manifest missing at {MANIFEST_PATH}")
@@ -34,9 +46,7 @@ def generate_dictionary():
         if first_char in letter_index and letter_index[first_char] == -1:
             letter_index[first_char] = i
 
-    # bytearray(b"...") is 12 chars from the start and two chars at the end
-    # replace \x00 with \000 because \x00 bleeds into next letter if valid hex
-    formatted_string_table = repr(string_table_bytes)[12:-2].replace(r"\x00",r"\000")
+    formatted_string_table = "".join(escape_c_byte(b) for b in string_table_bytes)
 
     word_count = len(word_entries)
     entries_formatted = ",\n".join(word_entries)
