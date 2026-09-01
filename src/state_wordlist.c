@@ -81,7 +81,7 @@ static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
     }
 
     // sitelen pona
-    gfx_ScaledRLETSprite_NoClip(sitelen_pona_glyphs_tiles[entry->sp_glyph_id], 10, y + 12, 2, 2);
+    drawBitmapSprite_NoClip(bitmap_glyphs[entry->sp_glyph_id], 10, y + 12, 2, 2);
 
     // sitelen Lasina and definition
     gfx_SetTextFGColor(0x00);

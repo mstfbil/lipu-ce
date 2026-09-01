@@ -43,7 +43,7 @@ static void redraw(void)
     gfx_PrintStringXY("lipu CE", 5, 5);
 
     // draw word sitelen pona glyph
-    gfx_ScaledRLETSprite_NoClip(sitelen_pona_glyphs_tiles[current_entry.sp_glyph_id], 136, 30, 4, 4);
+    drawBitmapSprite_NoClip(bitmap_glyphs[current_entry.sp_glyph_id], 136, 30, 4, 4);
 
     // word in sitelen Lasina
     gfx_SetTextScale(2, 2);

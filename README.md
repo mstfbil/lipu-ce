@@ -5,6 +5,7 @@
 ## Building
 
 The repo uses python scripts to build the dictionary database and sitelen pona glyphs. To build, `python3` must be in PATH.
+CEdev toolchain must be installed; refer to [CE installation guide](https://ce-programming.github.io/toolchain/static/getting-started.html) for details.
 
 ```bash
 git clone --recurse-submodules https://github.com/mstfbil/lipu-ce.git && cd lipu-ce
