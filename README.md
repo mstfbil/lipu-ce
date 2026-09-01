@@ -10,8 +10,13 @@ CEdev toolchain must be installed; refer to [CE installation guide](https://ce-p
 ```bash
 git clone --recurse-submodules https://github.com/mstfbil/lipu-ce.git && cd lipu-ce
 pip3 install -r requirements.txt
-make gfx && make
+make
 ```
+
+## Contributors
+
+- [@mstfbil](https://github.com/mstfbil) voltie_dev
+- [@Mirka1405](https://github.com/Mirka1405) jan Milon
 
 ##  License
 
