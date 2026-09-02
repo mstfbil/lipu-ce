@@ -1,6 +1,6 @@
 # lipu CE
 
-**lipu CE** is a [toki pona](https://en.wikipedia.org/wiki/Toki_Pona) dictionary for the TI-84 Plus CE calculator. *It is currently early in development!*
+**lipu CE** is a [toki pona](https://en.wikipedia.org/wiki/Toki_Pona) dictionary for the TI-84 Plus CE calculator.
 
 ## Building
 
