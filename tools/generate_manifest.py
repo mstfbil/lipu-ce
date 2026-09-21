@@ -11,7 +11,7 @@ WORDS_META_DIR = SONA_DIR / "words" / "metadata"
 DEFINITIONS_FILE = SONA_DIR / "words" / "source" / "definitions.toml"
 
 def generate_manifest():
-    inclueded_categories = os.getenv("WORD_CATEGORIES", "").split()
+    word_categories = os.getenv("WORD_CATEGORIES", "").split()
     
     with open(DEFINITIONS_FILE, "rb") as f:
         definitions = tomllib.load(f)
@@ -24,7 +24,7 @@ def generate_manifest():
         with open(meta_file, "rb") as f:
             meta = tomllib.load(f)
         
-        if not meta.get("usage_category") in inclueded_categories:
+        if not meta.get("usage_category") in word_categories:
             continue
         
         ucsur_hex = meta.get("representations").get("ucsur")

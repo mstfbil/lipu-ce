@@ -46,6 +46,11 @@ static void jumpToLetter(uint8_t key)
         if (key == ALPHABET_KEY_LOOKUP[i])
         {
             int new_idx = g_dictionary.letter_index[i];
+
+            // failsafe
+            if (new_idx < 0)
+                return;
+
             selected_word = new_idx;
             wordlist_start_idx = new_idx;
 
