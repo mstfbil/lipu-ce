@@ -48,14 +48,20 @@ static void redraw(void)
     // word in sitelen Lasina
     gfx_SetTextScale(2, 2);
     gfx_SetTextConfig(gfx_text_noclip);
-    const int word_width = gfx_GetStringWidth(current_entry.word);
+    int str_width = gfx_GetStringWidth(current_entry.word);
     gfx_SetTextFGColor(0x00);
-    gfx_PrintStringXY(current_entry.word, (GFX_LCD_WIDTH - word_width) / 2, 80);
+    gfx_PrintStringXY(current_entry.word, (GFX_LCD_WIDTH - str_width) / 2, 80);
+
+    // word category
     gfx_SetTextScale(1, 1); // reset text scale
+    gfx_SetTextXY(5, 100);
+    PrintWordCategory(current_entry.category);
+
     gfx_SetTextConfig(gfx_text_clip);
 
     // definition
-    gfx_PrintStringXYWrapped(getDefinition(&current_entry), 5, 100, GFX_LCD_WIDTH - 10, 10);
+    gfx_SetTextFGColor(0x00);
+    PrintStringXYWrapped(getDefinition(&current_entry), 5, 120, GFX_LCD_WIDTH - 10, 10);
 
     gfx_Blit(gfx_buffer);
 }

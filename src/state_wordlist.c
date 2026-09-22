@@ -88,10 +88,14 @@ static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
     // sitelen pona
     drawBitmapSprite_NoClip(bitmap_glyphs[entry->sp_glyph_id], 10, y + 12, 2, 2);
 
-    // sitelen Lasina and definition
+    // sitelen Lasina
     gfx_SetTextFGColor(0x00);
     gfx_SetTextXY(40, y + 19);
     gfx_PrintString(entry->word);
+    gfx_PrintString(" ");
+
+    // word category
+    PrintWordCategory(entry->category);
 
     gfx_SetTextFGColor(0xB5);
     gfx_PrintString(" - ");

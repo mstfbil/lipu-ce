@@ -4,7 +4,8 @@
 #define GLYPH_SIZE 12
 #define GLYPH_COLOR 0 // black if default palette is unchanged
 
-void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y){
+void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y)
+{
     /* how this works:
     we start with a mask of 10000000
     we shift it right by one position and use it to get a bit out of a byte
@@ -13,31 +14,39 @@ void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y
     uint8_t mask = 0b10000000;
     uint8_t sprite_index = 0;
     gfx_SetColor(GLYPH_COLOR);
-    for(uint8_t row=0;row<GLYPH_SIZE;row++){
+    for (uint8_t row = 0; row < GLYPH_SIZE; row++)
+    {
         uint8_t run_len = 0;
-        for(uint8_t col=0;col<GLYPH_SIZE;col++){
-            if(mask==0){mask=0b10000000;sprite_index++;}
-            if(sprite[sprite_index]&mask)run_len++;
-            else {
+        for (uint8_t col = 0; col < GLYPH_SIZE; col++)
+        {
+            if (mask == 0)
+            {
+                mask = 0b10000000;
+                sprite_index++;
+            }
+            if (sprite[sprite_index] & mask)
+                run_len++;
+            else
+            {
                 gfx_FillRectangle_NoClip(
-                    x + (col-run_len)*scale_x,
-                    y + row*scale_y,
-                    run_len*scale_x,
+                    x + (col - run_len) * scale_x,
+                    y + row * scale_y,
+                    run_len * scale_x,
                     scale_y);
-                run_len=0;
-                }
-            mask>>=1;
+                run_len = 0;
+            }
+            mask >>= 1;
         }
-        if(run_len)
+        if (run_len)
             gfx_FillRectangle_NoClip(
-                x + (GLYPH_SIZE-run_len)*scale_x,
-                y + row*scale_y,
-                run_len*scale_x,
+                x + (GLYPH_SIZE - run_len) * scale_x,
+                y + row * scale_y,
+                run_len * scale_x,
                 scale_y);
     }
 }
 
-void gfx_PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line_height)
+void PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line_height)
 {
     gfx_SetTextXY(x, y);
     const char *word_start = str;
@@ -80,6 +89,30 @@ void gfx_PrintStringXYWrapped(const char *str, int x, int y, int max_width, int 
         }
         cursor++;
     }
+}
+
+void PrintWordCategory(word_category_t category)
+{
+    switch (category)
+    {
+    case CORE:
+        gfx_SetTextBGColor(0x86);
+        gfx_PrintString("core");
+        break;
+    case COMMON:
+        gfx_SetTextBGColor(0x9D);
+        gfx_PrintString("common");
+        break;
+    case UNCOMMON:
+        gfx_SetTextBGColor(0xE5);
+        gfx_PrintString("uncommon");
+        break;
+    case OBSCURE:
+        gfx_SetTextBGColor(0xFB);
+        gfx_PrintString("obscure");
+        break;
+    }
+    gfx_SetTextBGColor(0xE0);
 }
 
 const char *getDefinition(const word_entry_t *entry)

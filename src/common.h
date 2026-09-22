@@ -17,7 +17,8 @@ extern void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x
 #define VERSION_NO "v0.0"
 #endif
 
-void gfx_PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line_height);
+void PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line_height);
+void PrintWordCategory(word_category_t category);
 const char *getDefinition(const word_entry_t *entry);
 
 #endif // __COMMON_H__

@@ -19,7 +19,7 @@ drawAboutScreen(void)
     gfx_PrintStringXY("lipu CE", 5, 5);
 
     gfx_SetTextFGColor(0x00);
-    gfx_PrintStringXYWrapped(credits_text, 10, 30, GFX_LCD_WIDTH - 20, 10);
+    PrintStringXYWrapped(credits_text, 10, 30, GFX_LCD_WIDTH - 20, 10);
 
     gfx_Blit(gfx_buffer);
 }
