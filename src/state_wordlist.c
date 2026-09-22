@@ -144,8 +144,13 @@ static void redraw(void)
     gfx_FillRectangle_NoClip(0, 0, GFX_LCD_WIDTH, 20);
     gfx_SetTextFGColor(0xFF);
     gfx_PrintStringXY("lipu CE", 5, 5);
-    // dunno how okay it is to hardcode ui pos but meh
-    gfx_PrintStringXY("[mode] About menu", 197, 5);
+    // selected word idx
+    gfx_PrintString(" - ");
+    gfx_PrintUInt(selected_word + 1, 1);
+    gfx_PrintString("/");
+    gfx_PrintUInt(g_dictionary.word_count, 1);
+    // about menu tip
+    gfx_PrintString(" - [mode] About menu");
 
     // draw word list
     gfx_SetTextConfig(gfx_text_clip);
