@@ -1,12 +1,8 @@
 #include "common.h"
-// A glyph is 12x12 in size, so this format uses 144 bits, or 18 bytes.
-// BYTES_PER_GLYPH is defined in common.h
-#define GLYPH_SIZE 12
-#define GLYPH_COLOR 0 // black if default palette is unchanged
 
 int selected_word = 0;
 
-void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y)
+void draw_bitmap_sprite_noclip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y)
 {
     /* how this works:
     we start with a mask of 10000000
@@ -48,7 +44,7 @@ void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y
     }
 }
 
-void PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line_height)
+void print_string_xy_wrapped(const char *str, int x, int y, int max_width, int line_height)
 {
     gfx_SetTextXY(x, y);
     const char *word_start = str;
@@ -93,7 +89,7 @@ void PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line
     }
 }
 
-void PrintWordCategory(word_category_t category)
+void print_word_category(word_category_t category)
 {
     switch (category)
     {
@@ -117,7 +113,7 @@ void PrintWordCategory(word_category_t category)
     gfx_SetTextBGColor(0xE0);
 }
 
-void GoToWord(int new_word_index)
+void go_to_word(int new_word_index)
 {
     if (new_word_index >= g_dictionary.word_count)
         selected_word = 0;
@@ -127,7 +123,7 @@ void GoToWord(int new_word_index)
         selected_word = new_word_index;
 }
 
-const char *getDefinition(const word_entry_t *entry)
+const char *get_definition(const word_entry_t *entry)
 {
     if (!entry)
         return NULL;

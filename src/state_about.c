@@ -6,8 +6,7 @@ char *credits_text = "lipu CE " VERSION_NO " - a toki pona dictionary for the TI
                      "- jan Milon - Mirka1405 on GitHub\n\n"
                      "Press any key to exit.";
 
-static void
-drawAboutScreen(void)
+static void draw(void)
 {
     gfx_SetDraw(gfx_buffer);
     gfx_FillScreen(0xFF);
@@ -19,14 +18,14 @@ drawAboutScreen(void)
     gfx_PrintStringXY("lipu CE", 5, 5);
 
     gfx_SetTextFGColor(0x00);
-    PrintStringXYWrapped(credits_text, 10, 30, GFX_LCD_WIDTH - 20, 10);
+    print_string_xy_wrapped(credits_text, 10, 30, GFX_LCD_WIDTH - 20, 10);
 
     gfx_Blit(gfx_buffer);
 }
 
 static void init(void)
 {
-    drawAboutScreen();
+    draw();
 }
 
 static void step(void)

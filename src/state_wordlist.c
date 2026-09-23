@@ -11,7 +11,7 @@ static uint8_t ALPHABET_KEY_LOOKUP[TOKI_PONA_ALPHABET_SIZE] = {sk_Math, sk_Sin, 
 
 static int wordlist_start_idx = 0;
 
-static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
+static void draw_word_info_box(const word_entry_t *entry, int y, bool selected)
 {
     // box
     if (selected)
@@ -27,7 +27,7 @@ static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
     }
 
     // sitelen pona
-    drawBitmapSprite_NoClip(bitmap_glyphs[entry->sp_glyph_id], 10, y + 12, 2, 2);
+    draw_bitmap_sprite_noclip(bitmap_glyphs[entry->sp_glyph_id], 10, y + 12, 2, 2);
 
     // sitelen Lasina
     gfx_SetTextFGColor(0x00);
@@ -36,12 +36,12 @@ static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
     gfx_PrintString(" ");
 
     // word category
-    PrintWordCategory(entry->category);
+    print_word_category(entry->category);
 
     gfx_SetTextFGColor(0xB5);
     gfx_PrintString(" - ");
     gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH - 2 * BOX_MARGIN, GFX_LCD_HEIGHT);
-    gfx_PrintString(getDefinition(entry));
+    gfx_PrintString(get_definition(entry));
     gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT);
 }
 
@@ -68,13 +68,13 @@ static void redraw(void)
     for (int i = 0; i < 5; i++)
     {
         int y = WORD_LIST_START_Y + (WORD_BOX_HEIGHT + 2) * i;
-        DrawWordInfoBox(&g_dictionary.words[wordlist_start_idx + i], y, wordlist_start_idx + i == selected_word);
+        draw_word_info_box(&g_dictionary.words[wordlist_start_idx + i], y, wordlist_start_idx + i == selected_word);
     }
 
     gfx_Blit(gfx_buffer);
 }
 
-static void ScrollList(void)
+static void scroll_list(void)
 {
     if (selected_word >= wordlist_start_idx + MAX_WORDS_SHOWN)
         wordlist_start_idx = selected_word - MAX_WORDS_SHOWN + 1;
@@ -82,22 +82,22 @@ static void ScrollList(void)
         wordlist_start_idx = selected_word;
 }
 
-static void jumpToLetter(uint8_t key)
+static void jump_to_letter(uint8_t key)
 {
     for (int i = 0; i < TOKI_PONA_ALPHABET_SIZE; i++)
         if (key == ALPHABET_KEY_LOOKUP[i])
         {
             int new_idx = g_dictionary.letter_index[i];
 
-            GoToWord(new_idx);
-            ScrollList();
+            go_to_word(new_idx);
+            scroll_list();
             redraw();
         }
 }
 
 static void init(void)
 {
-    ScrollList();
+    scroll_list();
     redraw();
 }
 
@@ -115,20 +115,20 @@ static void step(void)
             states_EnterState(&STATE_ABOUT);
             break;
         case sk_Down:
-            GoToWord(selected_word + 1);
-            ScrollList();
+            go_to_word(selected_word + 1);
+            scroll_list();
             redraw();
             break;
         case sk_Up:
-            GoToWord(selected_word - 1);
-            ScrollList();
+            go_to_word(selected_word - 1);
+            scroll_list();
             redraw();
             break;
         case sk_Enter:
             states_EnterState(&STATE_WORDOVERVIEW);
             break;
         default:
-            jumpToLetter(pressed_key);
+            jump_to_letter(pressed_key);
             break;
         }
     }

@@ -20,7 +20,7 @@ static void redraw(void)
     gfx_PrintUInt(g_dictionary.word_count, 1);
 
     // draw word sitelen pona glyph
-    drawBitmapSprite_NoClip(bitmap_glyphs[current_entry.sp_glyph_id], 136, 30, 4, 4);
+    draw_bitmap_sprite_noclip(bitmap_glyphs[current_entry.sp_glyph_id], 136, 30, 4, 4);
 
     // word in sitelen Lasina
     gfx_SetTextScale(2, 2);
@@ -32,13 +32,13 @@ static void redraw(void)
     // word category
     gfx_SetTextScale(1, 1); // reset text scale
     gfx_SetTextXY(5, 100);
-    PrintWordCategory(current_entry.category);
+    print_word_category(current_entry.category);
 
     gfx_SetTextConfig(gfx_text_clip);
 
     // definition
     gfx_SetTextFGColor(0x00);
-    PrintStringXYWrapped(getDefinition(&current_entry), 5, 120, GFX_LCD_WIDTH - 10, 10);
+    print_string_xy_wrapped(get_definition(&current_entry), 5, 120, GFX_LCD_WIDTH - 10, 10);
 
     gfx_Blit(gfx_buffer);
 }
@@ -59,11 +59,11 @@ static void step()
             states_EnterState(&STATE_WORDLIST);
             break;
         case sk_Down:
-            GoToWord(selected_word + 1);
+            go_to_word(selected_word + 1);
             redraw();
             break;
         case sk_Up:
-            GoToWord(selected_word - 1);
+            go_to_word(selected_word - 1);
             redraw();
             break;
         }
