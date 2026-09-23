@@ -9,66 +9,7 @@
 
 static uint8_t ALPHABET_KEY_LOOKUP[TOKI_PONA_ALPHABET_SIZE] = {sk_Math, sk_Sin, sk_Square, sk_Comma, sk_LParen, sk_RParen, sk_Div, sk_Log, sk_7, sk_8, sk_Ln, sk_4, sk_5, sk_Sub};
 
-static int selected_word = 0;
 static int wordlist_start_idx = 0;
-
-static void redraw(void);
-
-static void selectNextWord(void)
-{
-    selected_word++;
-    if (selected_word >= g_dictionary.word_count)
-    {
-        selected_word = 0;
-        wordlist_start_idx = 0;
-    }
-    if (selected_word >= wordlist_start_idx + MAX_WORDS_SHOWN)
-        wordlist_start_idx++;
-    redraw();
-}
-
-static void selectPrevWord(void)
-{
-    selected_word--;
-    if (selected_word < 0)
-    {
-        selected_word = g_dictionary.word_count - 1;
-        wordlist_start_idx = g_dictionary.word_count - MAX_WORDS_SHOWN;
-    }
-    if (selected_word < wordlist_start_idx)
-        wordlist_start_idx--;
-    redraw();
-}
-
-static void jumpToLetter(uint8_t key)
-{
-    for (int i = 0; i < TOKI_PONA_ALPHABET_SIZE; i++)
-        if (key == ALPHABET_KEY_LOOKUP[i])
-        {
-            int new_idx = g_dictionary.letter_index[i];
-
-            // failsafe
-            if (new_idx < 0)
-                return;
-
-            selected_word = new_idx;
-            wordlist_start_idx = new_idx;
-
-            // scroll back up if needed
-            if (wordlist_start_idx > g_dictionary.word_count - MAX_WORDS_SHOWN)
-                wordlist_start_idx = g_dictionary.word_count - MAX_WORDS_SHOWN;
-
-            redraw();
-
-            break;
-        }
-}
-
-static void enterCurrentWordOverview(void)
-{
-    state_WordOverview_SetEntry(selected_word);
-    states_EnterState(&STATE_WORDOVERVIEW);
-}
 
 static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
 {
@@ -104,40 +45,6 @@ static void DrawWordInfoBox(const word_entry_t *entry, int y, bool selected)
     gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT);
 }
 
-static void init(void)
-{
-    redraw();
-}
-
-static void step(void)
-{
-    static uint8_t pressed_key = 0;
-    if ((pressed_key = os_GetCSC()))
-    {
-        switch (pressed_key)
-        {
-        case sk_Clear:
-            states_EnterState(NULL);
-            break;
-        case sk_Mode:
-            states_EnterState(&STATE_ABOUT);
-            break;
-        case sk_Down:
-            selectNextWord();
-            break;
-        case sk_Up:
-            selectPrevWord();
-            break;
-        case sk_Enter:
-            enterCurrentWordOverview();
-            break;
-        default:
-            jumpToLetter(pressed_key);
-            break;
-        }
-    }
-}
-
 static void redraw(void)
 {
     gfx_SetDraw(gfx_buffer);
@@ -165,6 +72,66 @@ static void redraw(void)
     }
 
     gfx_Blit(gfx_buffer);
+}
+
+static void ScrollList(void)
+{
+    if (selected_word >= wordlist_start_idx + MAX_WORDS_SHOWN)
+        wordlist_start_idx = selected_word - MAX_WORDS_SHOWN + 1;
+    if (selected_word < wordlist_start_idx)
+        wordlist_start_idx = selected_word;
+}
+
+static void jumpToLetter(uint8_t key)
+{
+    for (int i = 0; i < TOKI_PONA_ALPHABET_SIZE; i++)
+        if (key == ALPHABET_KEY_LOOKUP[i])
+        {
+            int new_idx = g_dictionary.letter_index[i];
+
+            GoToWord(new_idx);
+            ScrollList();
+            redraw();
+        }
+}
+
+static void init(void)
+{
+    ScrollList();
+    redraw();
+}
+
+static void step(void)
+{
+    static uint8_t pressed_key = 0;
+    if ((pressed_key = os_GetCSC()))
+    {
+        switch (pressed_key)
+        {
+        case sk_Clear:
+            states_EnterState(NULL);
+            break;
+        case sk_Mode:
+            states_EnterState(&STATE_ABOUT);
+            break;
+        case sk_Down:
+            GoToWord(selected_word + 1);
+            ScrollList();
+            redraw();
+            break;
+        case sk_Up:
+            GoToWord(selected_word - 1);
+            ScrollList();
+            redraw();
+            break;
+        case sk_Enter:
+            states_EnterState(&STATE_WORDOVERVIEW);
+            break;
+        default:
+            jumpToLetter(pressed_key);
+            break;
+        }
+    }
 }
 
 const game_state_t STATE_WORDLIST = {init, step, NULL, NULL};

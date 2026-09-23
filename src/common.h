@@ -11,6 +11,8 @@
 
 #include "bitmap_glyphs.h"
 
+extern int selected_word;
+
 extern void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y);
 
 #ifndef VERSION_NO
@@ -19,6 +21,7 @@ extern void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x
 
 void PrintStringXYWrapped(const char *str, int x, int y, int max_width, int line_height);
 void PrintWordCategory(word_category_t category);
+void GoToWord(int new_word_index);
 const char *getDefinition(const word_entry_t *entry);
 
 #endif // __COMMON_H__

@@ -4,6 +4,8 @@
 #define GLYPH_SIZE 12
 #define GLYPH_COLOR 0 // black if default palette is unchanged
 
+int selected_word = 0;
+
 void drawBitmapSprite_NoClip(const uint8_t sprite[BYTES_PER_GLYPH], int x, int y, uint8_t scale_x, uint8_t scale_y)
 {
     /* how this works:
@@ -113,6 +115,16 @@ void PrintWordCategory(word_category_t category)
         break;
     }
     gfx_SetTextBGColor(0xE0);
+}
+
+void GoToWord(int new_word_index)
+{
+    if (new_word_index >= g_dictionary.word_count)
+        selected_word = 0;
+    else if (new_word_index < 0)
+        selected_word = g_dictionary.word_count - 1;
+    else
+        selected_word = new_word_index;
 }
 
 const char *getDefinition(const word_entry_t *entry)
