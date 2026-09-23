@@ -2,6 +2,10 @@
 
 **lipu CE** is a [toki pona](https://en.wikipedia.org/wiki/Toki_Pona) dictionary for the TI-84 Plus CE calculator.
 
+## Usage
+
+Pretty simple. You can scroll through the word list with `up` and `down` arrow buttons, and see the details with `enter`. You can scroll in the word overview as well. Press `mode` in word list to see credits.
+
 ## Building
 
 The repo uses python scripts to build the dictionary database and sitelen pona glyphs. To build, `python3` must be in PATH.
@@ -12,6 +16,8 @@ git clone --recurse-submodules https://github.com/mstfbil/lipu-ce.git && cd lipu
 pip3 install -r requirements.txt
 make
 ```
+
+You can make `core`, `core-common`, `core-uncommon` or `core-obscure` to build that variant. Each has their respective range of words included.
 
 ## Contributors
 

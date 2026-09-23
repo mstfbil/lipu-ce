@@ -21,6 +21,13 @@ GLYPH_WIDTH = 12
 GLYPH_HEIGHT = 12
 BYTES_PER_IMAGE = GLYPH_WIDTH * GLYPH_HEIGHT // 8
 
+WORD_CATEGORY_TO_C_ENUM = {
+    "core": 0,
+    "common": 1,
+    "uncommon": 2,
+    "obscure": 3
+}
+
 if GLYPH_HEIGHT * GLYPH_WIDTH != BYTES_PER_IMAGE * 8:
     raise ValueError("Only bitmap sizes divisible by 8 are acceptable, try 12*12")
 
@@ -87,7 +94,9 @@ def generate_dictionary(manifest: list[dict]):
         string_table_bytes.extend(definition.encode("utf-8"))
         string_table_bytes.append(0)
         
-        word_entries.append(f'    {{ "{word}", {i}, {def_offset} }}')
+        category_c_enum = WORD_CATEGORY_TO_C_ENUM[item["category"]]
+        
+        word_entries.append(f'    {{ "{word}", {i}, {def_offset}, {category_c_enum} }}')
         
         if first_char in letter_index and letter_index[first_char] == -1:
             letter_index[first_char] = i

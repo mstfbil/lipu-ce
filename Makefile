@@ -1,7 +1,7 @@
 NAME = LIPUCE
 DESCRIPTION = "lipu CE - toki pona dictionary"
 ICON = icon.png
-VERSION_NO = v1.0
+VERSION_NO = v1.1
 
 ARCHIVED = YES
 COMPRESSED = YES

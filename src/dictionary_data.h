@@ -5,11 +5,21 @@
 
 #include <stdint.h>
 
+typedef enum
+{
+    CORE,
+    COMMON,
+    UNCOMMON,
+    OBSCURE
+} word_category_t;
+
 typedef struct
 {
     const char *word;
     uint16_t sp_glyph_id;
     uint16_t def_offset;
+    word_category_t category;
+
 } word_entry_t;
 
 typedef struct

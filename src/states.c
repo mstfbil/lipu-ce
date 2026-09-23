@@ -3,7 +3,7 @@
 static const game_state_t *current_state = NULL;
 static const game_state_t *next_state = NULL;
 
-static void processStateTransition(void)
+static void process_state_transition(void)
 {
     if (next_state == current_state)
         return;
@@ -23,7 +23,7 @@ void states_EnterState(const game_state_t *new_state)
 void states_Init(const game_state_t *initial_state)
 {
     states_EnterState(initial_state);
-    processStateTransition();
+    process_state_transition();
 }
 
 void states_Step(void)
@@ -33,7 +33,7 @@ void states_Step(void)
 
     if (current_state->step != NULL)
         current_state->step();
-    processStateTransition();
+    process_state_transition();
     if (current_state != NULL && current_state->draw != NULL)
         current_state->draw();
 }
