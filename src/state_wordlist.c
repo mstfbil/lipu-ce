@@ -11,19 +11,20 @@ static uint8_t ALPHABET_KEY_LOOKUP[TOKI_PONA_ALPHABET_SIZE] = {sk_Math, sk_Sin, 
 
 static int wordlist_start_idx = 0;
 
-static void draw_word_info_box(const word_entry_t *entry, int y, bool selected)
+static void draw_word_info_box_noclip(const word_entry_t *entry, int y, bool selected)
 {
     // box
     if (selected)
     {
+        gfx_SetColor(0xDE);
+        gfx_FillRectangle_NoClip(BOX_MARGIN, y + BOX_MARGIN, GFX_LCD_WIDTH - BOX_MARGIN * 2, WORD_BOX_HEIGHT - BOX_MARGIN);
         gfx_SetColor(0x4A);
-        gfx_Rectangle(BOX_MARGIN, y + BOX_MARGIN, GFX_LCD_WIDTH - BOX_MARGIN * 2, WORD_BOX_HEIGHT - BOX_MARGIN);
-        gfx_Rectangle(BOX_MARGIN - 3, y + BOX_MARGIN - 3, GFX_LCD_WIDTH - (BOX_MARGIN - 3) * 2, WORD_BOX_HEIGHT - (BOX_MARGIN - 6));
+        gfx_Rectangle_NoClip(BOX_MARGIN, y + BOX_MARGIN, GFX_LCD_WIDTH - BOX_MARGIN * 2, WORD_BOX_HEIGHT - BOX_MARGIN);
     }
     else
     {
         gfx_SetColor(0xB5);
-        gfx_Rectangle(BOX_MARGIN, y + BOX_MARGIN, GFX_LCD_WIDTH - BOX_MARGIN * 2, WORD_BOX_HEIGHT - BOX_MARGIN);
+        gfx_Rectangle_NoClip(BOX_MARGIN, y + BOX_MARGIN, GFX_LCD_WIDTH - BOX_MARGIN * 2, WORD_BOX_HEIGHT - BOX_MARGIN);
     }
 
     // sitelen pona
@@ -37,12 +38,6 @@ static void draw_word_info_box(const word_entry_t *entry, int y, bool selected)
 
     // word category
     print_word_category(entry->category);
-
-    gfx_SetTextFGColor(0xB5);
-    gfx_PrintString(" - ");
-    gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH - 2 * BOX_MARGIN, GFX_LCD_HEIGHT);
-    gfx_PrintString(get_definition(entry));
-    gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT);
 }
 
 static void redraw(void)
@@ -68,7 +63,7 @@ static void redraw(void)
     for (int i = 0; i < 5; i++)
     {
         int y = WORD_LIST_START_Y + (WORD_BOX_HEIGHT + 2) * i;
-        draw_word_info_box(&g_dictionary.words[wordlist_start_idx + i], y, wordlist_start_idx + i == selected_word);
+        draw_word_info_box_noclip(&g_dictionary.words[wordlist_start_idx + i], y, wordlist_start_idx + i == selected_word);
     }
 
     gfx_Blit(gfx_buffer);
