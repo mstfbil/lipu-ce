@@ -2,6 +2,8 @@
 
 **lipu CE** is a [toki pona](https://en.wikipedia.org/wiki/Toki_Pona) dictionary for the TI-84 Plus CE calculator.
 
+[lipu CE on Cemetech](https://www.cemetech.net/downloads/files/3103/x4221)
+
 ## Usage
 
 Pretty simple. You can scroll through the word list with `up` and `down` arrow buttons, and see the details with `enter`. You can scroll in the word overview as well. Press `mode` in word list to see credits.
